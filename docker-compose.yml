@@ -1,0 +1,21 @@
+version: '3.9'
+services:
+  frontend:
+    build: .
+    image: react-feshesblog
+    ports:
+      - "8080:80"
+    restart: always
+  api:
+    build: .
+    image: flask-feshesblog
+    volumes:
+      - type: volume
+        source: data
+        target: /data
+    env_file: .env.api
+    environment:
+      DATABASE_URL: sqlite:////data/db.sqlite
+    restart: always
+volumes:
+  data:
