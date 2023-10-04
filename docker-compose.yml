@@ -2,13 +2,13 @@ version: '3.9'
 services:
   frontend:
     build: .
-    image: react-feshesblog
+    image: Feshesblog-ReactTS
     ports:
       - "8080:80"
     restart: always
   api:
     build: .
-    image: flask-feshesblog
+    image: Feshesblog-FlaskAPI
     volumes:
       - type: volume
         source: data

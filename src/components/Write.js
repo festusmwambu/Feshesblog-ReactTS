@@ -7,7 +7,6 @@ import { useApi } from '../contexts/ApiProvider';
 import { useUser } from '../contexts/UserProvider';
 
 
-
 export default function Write({ showPost }) {
   const [formErrors, setFormErrors] = useState({});
   const textField = useRef();

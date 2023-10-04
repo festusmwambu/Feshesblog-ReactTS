@@ -6,7 +6,6 @@ import More from "./More";
 import Write from './Write';
 
 
-
 export default function Posts({ content, write }) {
   const [posts, setPosts] = useState();
   const [pagination, setPagination] = useState(); 

@@ -11,7 +11,6 @@ import { useUser } from '../contexts/UserProvider';
 export default function Header() {
   const { user, logout } = useUser();
 
-
   return (
     <Navbar bg="light" sticky="top" className="Header">
       <Container>

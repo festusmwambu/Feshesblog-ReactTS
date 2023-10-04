@@ -1,29 +1,26 @@
 const BASE_API_URL = process.env.REACT_APP_BASE_API_URL;
 
-export default class FeshesblogApiClient {
-    constructor(onError) {
-        this.onError = onError;
-        this.base_url = BASE_API_URL + '/api';
-    }
+function FeshesblogApiClient(onError) {
+    const base_url = BASE_API_URL + '/api';
 
-    async request(options){
-        let response = await this.requestInternal(options);
+    async function request(options) {
+        let response = await requestInternal(options);
         if (response.status === 401 && options.url !== '/tokens') {
-            const refreshResponse = await this.put('/tokens', {
+            const refreshResponse = await put('/tokens', {
                 access_token: localStorage.getItem('accessToken'),
             });
             if (refreshResponse.ok) {
                 localStorage.setItem('accessToken', refreshResponse.body.access_token);
-                response = await this.requestInternal(options);
+                response = await requestInternal(options);
             }
         }
-        if (response.status >= 500 && this.onError) {
-            this.onError(response);
+        if (response.status >= 500 && onError) {
+            onError(response);
         }
         return response;
     }
 
-    async requestInternal(options) {
+    async function requestInternal(options) {
         let query = new URLSearchParams(options.query || {}).toString();
         if (query !=='') {
             query = '?' + query;
@@ -31,7 +28,7 @@ export default class FeshesblogApiClient {
 
         let response;
         try {
-            response = await fetch(this.base_url + options.url + query, {
+            response = await fetch(base_url + options.url + query, {
                 method: options.method,
                 headers: {
                     'Content-Type': 'application/json', 
@@ -64,53 +61,62 @@ export default class FeshesblogApiClient {
         };
     }
 
-    async get(url, query, options) {
-        return this.request({
+    async function get(url, query, options) {
+        return request({
             method: 'GET', url, query, ...options
         });
     }
 
-    async post(url, body, options) {
-        return this.request({
+    async function post(url, body, options) {
+        return request({
             method: 'POST', url, body, ...options
         });
     } 
 
-    async put(url, body, options) {
-        return this.request({
+    async function put(url, body, options) {
+        return request({
             method: 'PUT', url, body, ...options
         });
     }
 
-    async delete(url, options) {
-        return this.request({
+    async function remove(url, options) {
+        return request({
             method: 'DELETE', url, ...options
         });
     }
 
-
-
-    async login(username, password) {
-    const response = await this.post('/tokens', null, {
-      headers: {
-        Authorization:  'Basic ' + btoa(username + ":" + password)
-      }
-    });
-    if (!response.ok) {
-      return response.status === 401 ? 'fail' : 'error';
+    async function login(username, password) {
+        const response = await post('/tokens', null, {
+            headers: {
+                Authorization: 'Basic ' + btoa(username + ":" + password)
+            },
+        });
+        if (!response.ok) {
+            return response.status === 401 ? 'fail' : 'error';
+        }
+        localStorage.setItem('accessToken', response.body.access_token);
+        return 'ok';
     }
-    localStorage.setItem('accessToken', response.body.access_token);
-    return 'ok';
-  }
 
+    async function logout() {
+        await remove('/tokens');
+        localStorage.removeItem('accessToken');
+    }
 
-  async logout() {
-    await this.delete('/tokens');
-    localStorage.removeItem('accessToken');
-  }
+    function isAuthenticated() {
+        return localStorage.getItem('accessToken') !== null;
+    }
 
-
-  isAuthenticated() {
-    return localStorage.getItem('accessToken') !== null;
-  }
+    return {
+        request,
+        get,
+        post,
+        put,
+        remove,
+        login,
+        logout,
+        isAuthenticated,
+    };
 }
+
+export default FeshesblogApiClient;
