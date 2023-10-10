@@ -1,8 +1,8 @@
 # Introduction
 
-Feshesblog-FlaskAPI is an easy to use web API for creating blogs. It is an ideal project to use when learning a front end framework, as it provides a fully implemented back end that you can integrate against.
+`Feshesblog-ReactTS` is an easy to use web app User Interface. It is an ideal project to use when learning a front-end framework, as it provides a fully implemented back-end that you can integrate against.
 
-Feshesblog-FlaskAPI provides all the base features required to implement a blog web app:
+Feshesblog-ReactTS provides all front-end features required to interract with a blog web app:
 
 User registration, login and logout
 Password recovery flow with reset emails
@@ -10,7 +10,9 @@ Post creation and deletion
 Follow and unfollow users
 Feed with posts from followed users
 Pagination
-Option to disable authentication during development
+Option to disable authentication during development.
+
+Feshesblog-ReactTS front-end is build on `React`, `React-ContextAPI` and `Typescript`. I
 
 
 
